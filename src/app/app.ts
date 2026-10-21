@@ -44,7 +44,7 @@ type Aba = 'cobrancas' | 'pagamentos' | 'estoque';
         <aside class="lateral">
           <div class="marca">
             <span class="marca-logo"></span>
-            <div><strong>Barbearia</strong><small>Gestão</small></div>
+            <div><strong>Sistema</strong><small>Gestão</small></div>
           </div>
           <nav aria-label="Principal">
             @for (item of itens; track item.aba) {
