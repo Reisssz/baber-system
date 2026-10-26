@@ -3,7 +3,7 @@ import { Injectable, effect, inject, signal } from '@angular/core';
 
 export type Tema = 'claro' | 'escuro';
 
-const CHAVE = 'barber.tema';
+const CHAVE = 'gestao.tema';
 const CORES_DA_BARRA: Record<Tema, string> = { claro: '#0a1f4d', escuro: '#080f20' };
 
 function lerSalvo(): Tema | null {

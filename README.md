@@ -1,4 +1,4 @@
-# Barbearia · Gestão (Angular + Supabase)
+# Gestão de cobranças e estoque (Angular + Supabase)
 
 Controle de pagamentos parcelados (cobranças, atrasos, baixas totais ou parciais, adiamentos) e de estoque (principal e carro).
 

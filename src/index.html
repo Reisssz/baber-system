@@ -10,7 +10,7 @@
   <script>
     (function () {
       var tema = null;
-      try { tema = localStorage.getItem('barber.tema'); } catch (e) {}
+      try { tema = localStorage.getItem('gestao.tema'); } catch (e) {}
       if (tema !== 'claro' && tema !== 'escuro') {
         tema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'escuro' : 'claro';
       }

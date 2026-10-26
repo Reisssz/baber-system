@@ -6,7 +6,7 @@ import { resolver, supabase } from './supabase';
 
 const LIMITE_DE_PARCELAS = 1000;
 const COLUNAS_PARCELA =
-  'id, sale_id, number, due_date, postponed_to, amount, paid_amount, status, sales(description, clients(name, address, phone))';
+  'id, sale_id, number, due_date, postponed_to, amount, paid_amount, status, sales(description, client_id, clients(name, address, phone))';
 
 @Injectable({ providedIn: 'root' })
 export class ParcelasServico {

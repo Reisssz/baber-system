@@ -7,6 +7,7 @@ export type NomeIcone =
   | 'sair'
   | 'pin'
   | 'telefone'
+  | 'whatsapp'
   | 'busca'
   | 'mais'
   | 'menos'
@@ -30,6 +31,7 @@ export type NomeIcone =
         @case ('sair') { <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /> }
         @case ('pin') { <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z" /><circle cx="12" cy="10" r="3" /> }
         @case ('telefone') { <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /> }
+        @case ('whatsapp') { <path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l1.7-5.4A8.4 8.4 0 1 1 21 11.5z" /><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z" /> }
         @case ('busca') { <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.3-4.3" /> }
         @case ('mais') { <path d="M12 5v14M5 12h14" /> }
         @case ('menos') { <path d="M5 12h14" /> }

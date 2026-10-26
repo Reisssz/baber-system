@@ -24,7 +24,7 @@ type Aba = 'cobrancas' | 'pagamentos' | 'estoque';
         </button>
         <form class="login-card" (ngSubmit)="entrar()">
           <span class="marca-logo"></span>
-          <h1>Barbearia</h1>
+          <h1>Sistema</h1>
           <p class="sub">Gestão financeira e estoque</p>
           @if (!configurado) {
             <div class="alerta erro" role="alert">Configure a URL e a chave anon do Supabase em src/environments/environment.ts.</div>

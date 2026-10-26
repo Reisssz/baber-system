@@ -11,6 +11,7 @@ export interface Parcela {
   paid_amount: number;
   status: 'pendente' | 'pago';
   descricao: string;
+  cliente_id: string;
   cliente_nome: string;
   cliente_endereco: string;
   cliente_telefone: string;
@@ -36,7 +37,7 @@ export interface ParcelaBruta {
   amount: number;
   paid_amount: number;
   status: 'pendente' | 'pago';
-  sales: { description: string | null; clients: { name: string; address: string | null; phone: string | null } | null } | null;
+  sales: { description: string | null; client_id: string; clients: { name: string; address: string | null; phone: string | null } | null } | null;
 }
 
 export interface Produto {

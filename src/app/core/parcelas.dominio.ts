@@ -31,6 +31,7 @@ export function detalharParcela(bruta: ParcelaBruta, hoje: string): Parcela {
     paid_amount: bruta.paid_amount,
     status: bruta.status,
     descricao: bruta.sales?.description ?? '',
+    cliente_id: bruta.sales?.client_id ?? '',
     cliente_nome: cliente?.name ?? '(cliente removido)',
     cliente_endereco: cliente?.address ?? '',
     cliente_telefone: cliente?.phone ?? '',

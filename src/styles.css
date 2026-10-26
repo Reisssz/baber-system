@@ -77,6 +77,7 @@ app-icone svg { width: 100%; height: 100%; }
 .btn.grande { min-height: 50px; width: 100%; font-size: 1rem; }
 .btn.icone { width: 44px; padding: 0; }
 .btn.fantasma { background: transparent; color: var(--texto-2); }
+.btn.whatsapp { background: #25d366; color: #06210f; }
 :where(:root[data-tema='escuro']) .btn { background: var(--azul-500); color: #04122e; }
 
 /* ---------- Campos ---------- */
@@ -198,6 +199,10 @@ input::placeholder { color: color-mix(in srgb, var(--texto-2) 70%, transparent);
 .stat[data-tom='atrasado'] { --cor: var(--vermelho); }
 .stat[data-tom='hoje'] { --cor: var(--azul-500); }
 .stat[data-tom='receber'] { --cor: var(--verde); }
+button.stat { display: block; width: 100%; text-align: left; color: inherit; transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s; }
+button.stat:hover { border-color: var(--cor); }
+button.stat:active { transform: scale(0.98); }
+button.stat.ativo { border-color: var(--cor); box-shadow: 0 0 0 2px var(--cor), var(--sombra); }
 
 /* ---------- Parcelas ---------- */
 .grupo { margin-top: 28px; }
@@ -224,6 +229,9 @@ input::placeholder { color: color-mix(in srgb, var(--texto-2) 70%, transparent);
 .avatar { width: 42px; height: 42px; flex: none; display: grid; place-items: center; border-radius: 12px; background: color-mix(in srgb, var(--cor) 14%, var(--surface)); color: var(--cor); font: 700 1.3rem var(--fonte-titulo); }
 .parcela-info { min-width: 0; flex: 1; }
 .parcela-info h3 { font-size: 1.02rem; font-weight: 700; overflow-wrap: anywhere; }
+.nome-link { padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; text-decoration: underline transparent; text-underline-offset: 3px; transition: text-decoration-color 0.15s, color 0.15s; }
+.nome-link:hover:not(:disabled) { color: var(--azul-500); text-decoration-color: currentColor; }
+.nome-link:disabled { cursor: default; }
 .endereco { display: flex; align-items: flex-start; gap: 6px; margin-top: 2px; color: var(--texto-2); font-size: 0.85rem; }
 .endereco app-icone { margin-top: 2px; width: 1em; height: 1em; }
 .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px; background: color-mix(in srgb, var(--cor) 14%, var(--surface)); color: var(--cor); font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
@@ -248,6 +256,22 @@ input::placeholder { color: color-mix(in srgb, var(--texto-2) 70%, transparent);
 .esqueleto { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); margin-top: 24px; }
 .esqueleto i { display: block; height: 150px; border-radius: var(--raio); background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%); background-size: 200% 100%; border: 1px solid var(--borda); animation: brilho 1.3s ease-in-out infinite; }
 @keyframes brilho { to { background-position: -200% 0; } }
+
+/* ---------- Perfil do cliente ---------- */
+.modal-fundo { position: fixed; inset: 0; z-index: 50; display: grid; place-items: end center; background: rgb(4 10 24 / 0.6); backdrop-filter: blur(3px); }
+.modal { position: relative; width: min(100%, 640px); max-height: 92dvh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 22px 18px calc(22px + env(safe-area-inset-bottom)); background: var(--bg); border: 1px solid var(--borda); border-radius: 24px 24px 0 0; box-shadow: var(--sombra); }
+@media (min-width: 700px) { .modal-fundo { place-items: center; padding: 24px; } .modal { border-radius: 24px; } }
+.modal-fechar { position: absolute; top: 12px; right: 12px; font-size: 1.5rem; line-height: 1; }
+.perfil-topo { display: flex; align-items: flex-start; gap: 14px; padding-right: 44px; }
+.perfil-topo .avatar { width: 54px; height: 54px; font-size: 1.7rem; --cor: var(--azul-500); }
+.perfil-topo h2 { font: 700 1.7rem/1.1 var(--fonte-titulo); overflow-wrap: anywhere; }
+.perfil-numeros { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.perfil-numeros .stat strong { font-size: 1.5rem; }
+.perfil-secao { margin: 6px 0 -6px; font: 700 1.2rem/1 var(--fonte-titulo); }
+.perfil-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.perfil-lista li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--borda); box-shadow: inset 4px 0 0 var(--cor); }
+.perfil-lista strong { display: block; font-size: 0.92rem; }
+.perfil-lista small { color: var(--texto-2); font-size: 0.8rem; }
 
 /* ---------- Ajustes de celular ---------- */
 @media (max-width: 599px) {

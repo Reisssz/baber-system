@@ -1,11 +1,15 @@
 import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { mensagemDeErro } from './core/erros';
-import { brl, diaMes, diasAte, hoje, inicial, linkDeTelefone, linkDoMapa } from './core/formatadores';
+import { brl, diaMes, diasAte, hoje, inicial, linkDoMapa } from './core/formatadores';
 import type { EstadoParcela, Parcela } from './core/modelos';
 import { NotificacaoServico } from './core/notificacao.servico';
 import { ParcelasServico } from './core/parcelas.servico';
+import { linkDoWhatsapp, mensagemDeCobranca } from './core/whatsapp';
+import { ClientePerfilComponent } from './cliente-perfil.component';
 import { IconeComponent } from './icone.component';
+
+type Filtro = 'atrasado' | 'hoje' | 'receber';
 
 const GRUPOS: { k: EstadoParcela; t: string }[] = [
   { k: 'atrasado', t: 'Atrasadas' },
@@ -14,21 +18,27 @@ const GRUPOS: { k: EstadoParcela; t: string }[] = [
   { k: 'adiado', t: 'Adiadas' },
 ];
 
+const ESTADOS_DO_FILTRO: Record<Filtro, EstadoParcela[]> = {
+  atrasado: ['atrasado'],
+  hoje: ['hoje'],
+  receber: ['proxima', 'adiado'],
+};
+
 @Component({
   selector: 'app-parcelas',
-  imports: [FormsModule, IconeComponent],
+  imports: [FormsModule, IconeComponent, ClientePerfilComponent],
   template: `
     @if (mostrarResumo() && !carregando() && !erro()) {
       <section class="resumo" aria-label="Resumo">
-        <div class="stat" data-tom="atrasado">
+        <button type="button" class="stat" data-tom="atrasado" [class.ativo]="filtro() === 'atrasado'" [attr.aria-pressed]="filtro() === 'atrasado'" (click)="alternarFiltro('atrasado')">
           <span>Em atraso</span><strong>{{ brl(resumo().atrasado.total) }}</strong><small>{{ resumo().atrasado.qtd }} parcela(s)</small>
-        </div>
-        <div class="stat" data-tom="hoje">
+        </button>
+        <button type="button" class="stat" data-tom="hoje" [class.ativo]="filtro() === 'hoje'" [attr.aria-pressed]="filtro() === 'hoje'" (click)="alternarFiltro('hoje')">
           <span>Cobrar hoje</span><strong>{{ brl(resumo().hoje.total) }}</strong><small>{{ resumo().hoje.qtd }} parcela(s)</small>
-        </div>
-        <div class="stat" data-tom="receber">
+        </button>
+        <button type="button" class="stat" data-tom="receber" [class.ativo]="filtro() === 'receber'" [attr.aria-pressed]="filtro() === 'receber'" (click)="alternarFiltro('receber')">
           <span>A receber</span><strong>{{ brl(resumo().receber.total) }}</strong><small>{{ resumo().receber.qtd }} parcela(s)</small>
-        </div>
+        </button>
       </section>
     }
 
@@ -56,7 +66,7 @@ const GRUPOS: { k: EstadoParcela; t: string }[] = [
                 <div class="parcela-topo">
                   <div class="avatar" aria-hidden="true">{{ inicial(i.cliente_nome) }}</div>
                   <div class="parcela-info">
-                    <h3>{{ i.cliente_nome }}</h3>
+                    <h3><button type="button" class="nome-link" (click)="perfil.set(i.cliente_id)" [disabled]="!i.cliente_id">{{ i.cliente_nome }}</button></h3>
                     <p class="endereco"><app-icone nome="pin" /><span>{{ i.cliente_endereco || 'Sem endereço cadastrado' }}</span></p>
                   </div>
                   <span class="badge">{{ rotulo(i) }}</span>
@@ -79,8 +89,8 @@ const GRUPOS: { k: EstadoParcela; t: string }[] = [
                   @if (i.cliente_endereco) {
                     <a class="btn suave" [href]="linkDoMapa(i.cliente_endereco)" target="_blank" rel="noopener noreferrer"><app-icone nome="navegacao" />Rota</a>
                   }
-                  @if (i.cliente_telefone) {
-                    <a class="btn suave" [href]="linkDeTelefone(i.cliente_telefone)"><app-icone nome="telefone" />Ligar</a>
+                  @if (i.cliente_telefone && i.status !== 'pago') {
+                    <a class="btn whatsapp" [href]="linkCobranca(i)" target="_blank" rel="noopener noreferrer"><app-icone nome="whatsapp" />WhatsApp</a>
                   }
                   @if (i.status !== 'pago') {
                     <button class="btn" (click)="abrir(i)" [attr.aria-expanded]="selecionada() === i.id">Dar baixa</button>
@@ -114,6 +124,10 @@ const GRUPOS: { k: EstadoParcela; t: string }[] = [
         </section>
       }
     }
+
+    @if (perfil(); as clienteId) {
+      <app-cliente-perfil [clienteId]="clienteId" (fechar)="perfil.set(null)" />
+    }
   `,
 })
 export class ParcelasComponent {
@@ -128,6 +142,8 @@ export class ParcelasComponent {
   readonly erro = signal('');
   readonly selecionada = signal<string | null>(null);
   readonly ocupado = signal(false);
+  readonly filtro = signal<Filtro | null>(null);
+  readonly perfil = signal<string | null>(null);
 
   valor = 0;
   data = '';
@@ -137,12 +153,13 @@ export class ParcelasComponent {
   readonly hoje = hoje;
   readonly inicial = inicial;
   readonly linkDoMapa = linkDoMapa;
-  readonly linkDeTelefone = linkDeTelefone;
 
   readonly grupos = computed(() => {
     const definicao = this.mostrarPagas() ? [...GRUPOS, { k: 'pago' as const, t: 'Pagas' }] : GRUPOS;
+    const filtro = this.filtro();
+    const visiveis = filtro ? definicao.filter((grupo) => ESTADOS_DO_FILTRO[filtro].includes(grupo.k)) : definicao;
     const linhas = this.linhas();
-    return definicao.map((grupo) => ({ ...grupo, itens: linhas.filter((linha) => linha.estado === grupo.k) }));
+    return visiveis.map((grupo) => ({ ...grupo, itens: linhas.filter((linha) => linha.estado === grupo.k) }));
   });
 
   readonly resumo = computed(() => {
@@ -191,6 +208,14 @@ export class ParcelasComponent {
       default:
         return dias === 1 ? 'Amanhã' : `Em ${dias} dias`;
     }
+  }
+
+  alternarFiltro(filtro: Filtro): void {
+    this.filtro.update((atual) => (atual === filtro ? null : filtro));
+  }
+
+  linkCobranca(parcela: Parcela): string {
+    return linkDoWhatsapp(parcela.cliente_telefone, mensagemDeCobranca(parcela));
   }
 
   progresso(parcela: Parcela): number {
