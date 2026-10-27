@@ -5,15 +5,16 @@ import { NotificacaoServico } from './core/notificacao.servico';
 import { supabaseConfigurado } from './core/supabase';
 import { TemaServico } from './core/tema.servico';
 import { EstoqueComponent } from './estoque.component';
+import { DevedoresComponent } from './devedores.component';
 import { IconeComponent, type NomeIcone } from './icone.component';
 import { PagamentosComponent } from './pagamentos.component';
 import { ParcelasComponent } from './parcelas.component';
 
-type Aba = 'cobrancas' | 'pagamentos' | 'estoque';
+type Aba = 'cobrancas' | 'devedores' | 'pagamentos' | 'estoque';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, IconeComponent, ParcelasComponent, PagamentosComponent, EstoqueComponent],
+  imports: [FormsModule, IconeComponent, ParcelasComponent, DevedoresComponent, PagamentosComponent, EstoqueComponent],
   template: `
     @if (!autenticacao.pronto()) {
       <div class="tela-carregando" role="status" aria-label="Carregando"><span class="spinner"></span></div>
@@ -67,6 +68,7 @@ type Aba = 'cobrancas' | 'pagamentos' | 'estoque';
           <main class="conteudo">
             @switch (aba()) {
               @case ('cobrancas') { <app-parcelas [mostrarResumo]="true" /> }
+              @case ('devedores') { <app-devedores /> }
               @case ('pagamentos') { <app-pagamentos /> }
               @case ('estoque') { <app-estoque /> }
             }
@@ -101,6 +103,7 @@ export class App {
   readonly entrando = signal(false);
   readonly itens: { aba: Aba; titulo: string; icone: NomeIcone }[] = [
     { aba: 'cobrancas', titulo: 'Cobranças', icone: 'cobrancas' },
+    { aba: 'devedores', titulo: 'Devedores', icone: 'usuarios' },
     { aba: 'pagamentos', titulo: 'Pagamentos', icone: 'pagamentos' },
     { aba: 'estoque', titulo: 'Estoque', icone: 'estoque' },
   ];

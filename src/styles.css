@@ -114,7 +114,7 @@ input::placeholder { color: color-mix(in srgb, var(--texto-2) 70%, transparent);
 .lateral { display: none; }
 .tabbar {
   position: fixed; inset: auto 0 0 0; z-index: 30;
-  display: grid; grid-template-columns: repeat(3, 1fr);
+  display: grid; grid-template-columns: repeat(4, 1fr);
   padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: blur(14px);
@@ -256,6 +256,21 @@ button.stat.ativo { border-color: var(--cor); box-shadow: 0 0 0 2px var(--cor), 
 .esqueleto { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); margin-top: 24px; }
 .esqueleto i { display: block; height: 150px; border-radius: var(--raio); background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 50%, var(--surface) 75%); background-size: 200% 100%; border: 1px solid var(--borda); animation: brilho 1.3s ease-in-out infinite; }
 @keyframes brilho { to { background-position: -200% 0; } }
+
+/* ---------- Devedores ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.devedores-barra { display: grid; gap: 12px; margin: 16px 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--borda); background: var(--surface); color: var(--texto-2); font-size: 0.85rem; font-weight: 600; }
+.chip.ativo { background: color-mix(in srgb, var(--azul-500) 14%, var(--surface)); border-color: var(--azul-500); color: var(--azul-500); }
+.devedores-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.devedor { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px 12px 18px; text-align: left; background: var(--surface); border: 1px solid var(--borda); border-radius: 14px; box-shadow: inset 4px 0 0 var(--cor), var(--sombra); color: inherit; transition: border-color 0.15s, transform 0.12s; }
+.devedor:hover { border-color: var(--cor); }
+.devedor:active { transform: scale(0.99); }
+.devedor-info { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.devedor-info strong { font-size: 1rem; overflow-wrap: anywhere; }
+.devedor-info small { color: var(--texto-2); font-size: 0.8rem; }
+.devedor-valor { font: 700 1.5rem/1 var(--fonte-titulo); color: var(--cor); white-space: nowrap; }
 
 /* ---------- Perfil do cliente ---------- */
 .modal-fundo { position: fixed; inset: 0; z-index: 50; display: grid; place-items: end center; background: rgb(4 10 24 / 0.6); backdrop-filter: blur(3px); }
